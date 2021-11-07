@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"teenytinycompiler/emitter"
 	"teenytinycompiler/lexer"
 	"teenytinycompiler/parser"
 )
@@ -18,9 +19,12 @@ func main() {
 	input, err := os.ReadFile(os.Args[1])
 	check(err)
 
+	// Initialize the lexer, emitter, and parser
 	lex := lexer.Constructor(string(input))
-	parse := parser.Constructor(lex)
+	emit := emitter.Constructor("out.c")
+	parse := parser.Constructor(lex, emit)
 	parse.Program()
+	emit.WriteFile()
 
 	fmt.Println("Parsing completed.")
 }
